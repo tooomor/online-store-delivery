@@ -1,13 +1,11 @@
 package com.tooomor.online.store.delivery.utils;
 
 import com.tooomor.online.store.delivery.model.Location;
-import com.tooomor.online.store.delivery.model.Warehouse;
 import com.tooomor.online.store.delivery.model.Waypoint;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.geom.Point2D;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class NavigationHelper {
@@ -20,11 +18,6 @@ public class NavigationHelper {
         this.distance = 0.0;
         this.optimalRoute = new ArrayList<>();
         this.routes = new ArrayList<>();
-    }
-
-    public NavigationHelper(Double distance, List<Waypoint> optimalRoute) {
-        this.distance = distance;
-        this.optimalRoute = new ArrayList<>();
     }
 
     public void findAllRoutes(List<Waypoint> waypoints){
@@ -52,7 +45,6 @@ public class NavigationHelper {
             Location startingPoint,
             Location destination) {
         this.distance = Double.MAX_VALUE;
-        NavigationHelper navigationHelper = new NavigationHelper(Double.MAX_VALUE, null);
         routes.stream().forEach(route -> {
             Double distance = 0.0;
             Point2D point = locationToPoint(startingPoint);
