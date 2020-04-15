@@ -1,5 +1,7 @@
 package com.tooomor.online.store.delivery.model;
 
+import java.util.UUID;
+
 public class Location {
     Double pointX;
     Double pointY;

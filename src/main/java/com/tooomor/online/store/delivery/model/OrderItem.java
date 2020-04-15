@@ -1,16 +1,16 @@
 package com.tooomor.online.store.delivery.model;
 
-public class Subcontract {
+public class OrderItem {
     String orderNumber;
     Warehouse warehouse;
-    Integer waypoint;
+    Integer waypointNo;
 
-    public Integer getWaypoint() {
-        return waypoint;
+    public Integer getWaypointNo() {
+        return waypointNo;
     }
 
-    public void setWaypoint(Integer waypoint) {
-        this.waypoint = waypoint;
+    public void setWaypointNo(Integer waypointNo) {
+        this.waypointNo = waypointNo;
     }
 
     public String getOrderNumber() {
@@ -29,9 +29,9 @@ public class Subcontract {
         this.warehouse = warehouse;
     }
 
-    public Subcontract(String orderNumber, Warehouse warehouse, Integer waypoint) {
+    public OrderItem(String orderNumber, Warehouse warehouse, Integer waypointNo) {
         this.orderNumber = orderNumber;
         this.warehouse = warehouse;
-        this.waypoint = waypoint;
+        this.waypointNo = waypointNo;
     }
 }

@@ -22,22 +22,27 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public List<Subcontract> calculateWay(Order order) {
+    public List<OrderItem> calculateWay(Order order) {
         log.info(main_wh_location.toString());
-        List<Warehouse> warehouses = order.getSubcontracts().stream().map(Subcontract::getWarehouse).collect(Collectors.toList());
-        NavigationHelper navigationHelper = new NavigationHelper(warehouses);
-        navigationHelper.findAllRoutes(warehouses.size(), warehouses);
-        navigationHelper.findOptimalRoute(main_wh_location, order.getClient().getAddress().getLocation());
+        List<Waypoint> waypoints = order.getOrderItems()
+                .stream()
+                .map(oi -> {
+                    Warehouse wh = oi.getWarehouse();
+                    return new Waypoint(wh.getCode(), wh.getAddress().getLocation());
+                })
+                .collect(Collectors.toList());
+        NavigationHelper navigationHelper = new NavigationHelper();
+        navigationHelper.findOptimalRoute(main_wh_location, order.getClient().getAddress().getLocation(), waypoints);
         AtomicReference<Integer> priority = new AtomicReference<>(1);
-        navigationHelper.getOptimalRoute().stream().forEach(wh -> {
-            order.getSubcontracts()
+        navigationHelper.getOptimalRoute().stream().forEach(wp -> {
+            order.getOrderItems()
                     .stream()
-                    .filter(sub -> sub.getWarehouse().getCode() == wh)
-                    .forEach(sub -> sub.setWaypoint(priority.get()));
+                    .filter(sub -> sub.getWarehouse().getCode().equals(wp.getId()))
+                    .forEach(sub -> sub.setWaypointNo(priority.get()));
             priority.getAndSet(priority.get() + 1);
             });
         log.info(navigationHelper.toString());
-        return order.getSubcontracts();
+        return order.getOrderItems();
     }
 
 }

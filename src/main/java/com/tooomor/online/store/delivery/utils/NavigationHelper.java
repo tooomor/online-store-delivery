@@ -2,6 +2,7 @@ package com.tooomor.online.store.delivery.utils;
 
 import com.tooomor.online.store.delivery.model.Location;
 import com.tooomor.online.store.delivery.model.Warehouse;
+import com.tooomor.online.store.delivery.model.Waypoint;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.geom.Point2D;
@@ -12,34 +13,72 @@ import java.util.stream.Collectors;
 public class NavigationHelper {
 
     private Double distance;
-    private List<String> optimalRoute;
-    private List<List<String>> routes;
-    private HashMap<String, Location> navMap;
+    private List<Waypoint> optimalRoute;
+    private List<List<Waypoint>> routes;
 
-    public NavigationHelper(List<Warehouse> warehouses){
+    public NavigationHelper(){
         this.distance = 0.0;
         this.optimalRoute = new ArrayList<>();
         this.routes = new ArrayList<>();
-        this.navMap = setMap(warehouses);
     }
 
-    private HashMap<String, Location> setMap(List<Warehouse> warehouses) {
-        HashMap<String, Location> navMap = new HashMap<>();
-        warehouses.stream().forEach(wh -> navMap.put(wh.getCode(), wh.getAddress().getLocation()));
-        return navMap;
-    }
-
-    public NavigationHelper(Double distance, List<String> optimalRoute) {
+    public NavigationHelper(Double distance, List<Waypoint> optimalRoute) {
         this.distance = distance;
-        this.optimalRoute = optimalRoute;
+        this.optimalRoute = new ArrayList<>();
     }
 
-    public List<List<String>> getRoutes() {
+    public void findAllRoutes(List<Waypoint> waypoints){
+        findAllRoutes(waypoints.size(), waypoints);
+    }
+
+    public void findAllRoutes(Integer numOfWaypoints, List<Waypoint> waypoints) {
+        if(numOfWaypoints == 1) {
+            this.routes.add(new ArrayList<>(waypoints));
+        } else {
+            for(int i = 0; i < numOfWaypoints-1; i++) {
+                findAllRoutes(numOfWaypoints - 1, waypoints);
+                if(numOfWaypoints % 2 == 0) {
+                    Collections.swap(waypoints, i, numOfWaypoints-1);
+                } else {
+                    Collections.swap(waypoints, 0, numOfWaypoints-1);
+                }
+            }
+            findAllRoutes(numOfWaypoints - 1, waypoints);
+        }
+    }
+
+    public void findOptimalRoute(
+            List<List<Waypoint>> routes,
+            Location startingPoint,
+            Location destination) {
+        this.distance = Double.MAX_VALUE;
+        NavigationHelper navigationHelper = new NavigationHelper(Double.MAX_VALUE, null);
+        routes.stream().forEach(route -> {
+            Double distance = 0.0;
+            Point2D point = locationToPoint(startingPoint);
+            for(Waypoint waypoint : route){
+                Point2D nextPoint = locationToPoint(waypoint.getLocation());
+                distance += point.distance(nextPoint);
+                point = nextPoint;
+            }
+            distance+=point.distance(locationToPoint(destination));
+            if (this.distance > distance) {
+                this.distance = distance;
+                this.optimalRoute = route;
+            }
+        });
+    }
+
+    public void findOptimalRoute(Location startingPoint, Location destination, List<Waypoint> waypoints){
+        findAllRoutes(waypoints.size(), waypoints);
+        findOptimalRoute(this.routes, startingPoint, destination);
+    }
+
+    public Point2D.Double locationToPoint(Location location) {
+        return new Point2D.Double(location.getPointX(), location.getPointY());
+    }
+    public List<List<Waypoint>> getRoutes() {
         return routes;
-    }
-
-    public Map<String, Location> getNavMap() {
-        return navMap;
     }
 
     public Double getDistance() {
@@ -50,58 +89,12 @@ public class NavigationHelper {
         this.distance = distance;
     }
 
-    public List<String> getOptimalRoute() {
+    public List<Waypoint> getOptimalRoute() {
         return optimalRoute;
     }
 
-    private void setOptimalRoute(List<String> optimalRoute) {
+    private void setOptimalRoute(List<Waypoint> optimalRoute) {
         this.optimalRoute = optimalRoute;
-    }
-
-    public void findAllRoutes(Integer waypoints, List<Warehouse> warehouses) {
-        if(waypoints == 1) {
-            this.routes.add(warehouses.stream().map(Warehouse::getCode).collect(Collectors.toList()));
-        } else {
-            for(int i = 0; i < waypoints-1; i++) {
-                findAllRoutes(waypoints - 1, warehouses);
-                if(waypoints % 2 == 0) {
-                    Collections.swap(warehouses, i, waypoints-1);
-
-                } else {
-                    Collections.swap(warehouses, 0, waypoints-1);
-                }
-            }
-            findAllRoutes(waypoints - 1, warehouses);
-        }
-    }
-
-    public void findOptimalRoute(
-            List<List<String>> routes,
-            Location startingPoint,
-            Location destination) {
-        this.distance = Double.MAX_VALUE;
-        NavigationHelper navigationHelper = new NavigationHelper(Double.MAX_VALUE, null);
-        routes.stream().forEach(route -> {
-            Double distance = 0.0;
-            Point2D waypoint = locationToPoint(startingPoint);
-            for(String location : route){
-                Point2D newWaypoint = locationToPoint(this.navMap.get(location));
-                distance += waypoint.distance(newWaypoint);
-                waypoint = newWaypoint;
-            }
-            if (this.distance > distance) {
-                this.distance = distance;
-                this.optimalRoute = route;
-            }
-        });
-    }
-
-    public void findOptimalRoute(Location startingPoint, Location destination){
-        findOptimalRoute(this.routes, startingPoint, destination);
-    }
-
-    public Point2D.Double locationToPoint(Location location) {
-        return new Point2D.Double(location.getPointX(), location.getPointY());
     }
 
     @Override

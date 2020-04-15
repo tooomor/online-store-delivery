@@ -5,7 +5,7 @@ import java.util.List;
 public class Order {
     String orderNumber;
     Client client;
-    List<Subcontract> subcontracts;
+    List<OrderItem> orderItems;
 
     public String getOrderNumber() {
         return orderNumber;
@@ -23,17 +23,17 @@ public class Order {
         this.client = client;
     }
 
-    public List<Subcontract> getSubcontracts() {
-        return subcontracts;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setSubcontracts(List<Subcontract> subcontracts) {
-        this.subcontracts = subcontracts;
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
-    public Order(String orderNumber, Client client, List<Subcontract> subcontracts) {
+    public Order(String orderNumber, Client client, List<OrderItem> orderItems) {
         this.orderNumber = orderNumber;
         this.client = client;
-        this.subcontracts = subcontracts;
+        this.orderItems = orderItems;
     }
 }
