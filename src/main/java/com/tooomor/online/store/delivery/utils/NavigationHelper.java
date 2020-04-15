@@ -20,10 +20,6 @@ public class NavigationHelper {
         this.routes = new ArrayList<>();
     }
 
-    public void findAllRoutes(List<Waypoint> waypoints){
-        findAllRoutes(waypoints.size(), waypoints);
-    }
-
     public void findAllRoutes(Integer numOfWaypoints, List<Waypoint> waypoints) {
         if(numOfWaypoints == 1) {
             this.routes.add(new ArrayList<>(waypoints));
