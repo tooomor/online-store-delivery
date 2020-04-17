@@ -28,7 +28,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                 .stream()
                 .map(oi -> {
                     Warehouse wh = oi.getWarehouse();
-                    return new Waypoint(wh.getCode(), wh.getAddress().getLocation());
+                    return Waypoint.builder().id(wh.getCode()).location(wh.getAddress().getLocation()).build();
                 })
                 .collect(Collectors.toList());
         NavigationHelper navigationHelper = new NavigationHelper();
