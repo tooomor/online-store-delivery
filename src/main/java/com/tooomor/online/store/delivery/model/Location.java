@@ -1,15 +1,10 @@
 package com.tooomor.online.store.delivery.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.OneToOne;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class Location {
-    Double pointX;
-    Double pointY;
+class Location {
+    private Integer id;
+    private String locationName;
+    @OneToOne
+    private Address address;
 }

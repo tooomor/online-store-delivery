@@ -1,7 +1,7 @@
 package com.tooomor.online.store.delivery.controller;
 
-import com.tooomor.online.store.delivery.model.Order;
-import com.tooomor.online.store.delivery.model.OrderItem;
+import com.tooomor.online.store.delivery.model.OrderDTO;
+import com.tooomor.online.store.delivery.model.OrderItemDTO;
 import com.tooomor.online.store.delivery.service.DeliveryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +23,9 @@ public class DeliveryController {
     }
 
     @PostMapping("/calculate")
-    public ResponseEntity<List<OrderItem>> calculateWay(@RequestBody Order order){
+    public ResponseEntity<List<OrderItemDTO>> calculateWay(@RequestBody OrderDTO orderDTO){
 
-        List<OrderItem> orderItems = deliveryService.calculateWay(order);
+        List<OrderItemDTO> orderItems = deliveryService.calculateWay(orderDTO);
 
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }

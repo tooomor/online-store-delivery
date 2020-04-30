@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Client {
-    String firstName;
-    String lastName;
-    Address address;
+public class WarehouseDTO {
+    String code;
+    String fullName;
+    AddressDTO address;
 }

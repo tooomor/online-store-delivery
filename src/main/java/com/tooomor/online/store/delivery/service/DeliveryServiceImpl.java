@@ -15,34 +15,36 @@ import java.util.stream.Collectors;
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
 
-    private Location main_wh_location = new Location();
+    private Geolocation main_wh_location = new Geolocation();
 
-    public void setMain_wh_location(Location main_wh_location) {
+    public void setMain_wh_location(Geolocation main_wh_location) {
         this.main_wh_location = main_wh_location;
     }
 
     @Override
-    public List<OrderItem> calculateWay(Order order) {
+    public List<OrderItemDTO> calculateWay(OrderDTO orderDTO) {
         log.info(main_wh_location.toString());
-        List<Waypoint> waypoints = order.getOrderItems()
+        List<Waypoint> waypoints = orderDTO.getOrderItems()
                 .stream()
                 .map(oi -> {
-                    Warehouse wh = oi.getWarehouse();
+                    WarehouseDTO wh = oi.getWarehouse();
+                    //TODO
                     return Waypoint.builder().id(wh.getCode()).location(wh.getAddress().getLocation()).build();
                 })
                 .collect(Collectors.toList());
         NavigationHelper navigationHelper = new NavigationHelper();
-        navigationHelper.findOptimalRoute(main_wh_location, order.getClient().getAddress().getLocation(), waypoints);
+        //TODO
+        navigationHelper.findOptimalRoute(main_wh_location, orderDTO.getClient().getAddress().getLocation(), waypoints);
         AtomicReference<Integer> priority = new AtomicReference<>(1);
         navigationHelper.getOptimalRoute().stream().forEach(wp -> {
-            order.getOrderItems()
+            orderDTO.getOrderItems()
                     .stream()
                     .filter(sub -> sub.getWarehouse().getCode().equals(wp.getId()))
                     .forEach(sub -> sub.setWaypointNo(priority.get()));
             priority.getAndSet(priority.get() + 1);
             });
         log.info(navigationHelper.toString());
-        return order.getOrderItems();
+        return orderDTO.getOrderItems();
     }
 
 }

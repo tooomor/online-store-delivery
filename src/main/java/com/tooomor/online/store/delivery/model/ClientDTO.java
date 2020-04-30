@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Waypoint {
-    String id;
-    Address address;
-    Geolocation location;
+public class ClientDTO {
+    String firstName;
+    String lastName;
+    AddressDTO address;
 }

@@ -5,14 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Order {
+public class OrderItemDTO {
     String orderNumber;
-    Client client;
-    List<OrderItem> orderItems;
+    WarehouseDTO warehouse;
+    Integer waypointNo;
 }

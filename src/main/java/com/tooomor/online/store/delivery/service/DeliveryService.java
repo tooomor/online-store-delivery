@@ -1,11 +1,11 @@
 package com.tooomor.online.store.delivery.service;
 
-import com.tooomor.online.store.delivery.model.Order;
-import com.tooomor.online.store.delivery.model.OrderItem;
+import com.tooomor.online.store.delivery.model.OrderDTO;
+import com.tooomor.online.store.delivery.model.OrderItemDTO;
 
 import java.util.List;
 
 public interface DeliveryService {
 
-    List<OrderItem> calculateWay(Order order);
+    List<OrderItemDTO> calculateWay(OrderDTO orderDTO);
 }

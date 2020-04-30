@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Warehouse {
-    String code;
-    String fullName;
-    Address address;
+public class AddressDTO {
+    String street;
+    String houseNumber;
+    String apartmentNumber;
+    String postalCode;
+    String city;
 }
