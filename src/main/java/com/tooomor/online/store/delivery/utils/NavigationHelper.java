@@ -1,6 +1,6 @@
 package com.tooomor.online.store.delivery.utils;
 
-import com.tooomor.online.store.delivery.model.Geolocation;
+import com.tooomor.online.store.delivery.model.GeolocationDTO;
 import com.tooomor.online.store.delivery.model.Waypoint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,8 +42,8 @@ public class NavigationHelper {
 
     public void findOptimalRoute(
             List<List<Waypoint>> routes,
-            Geolocation startingPoint,
-            Geolocation destination) {
+            GeolocationDTO startingPoint,
+            GeolocationDTO destination) {
         this.distance = Double.MAX_VALUE;
         routes.stream().forEach(route -> {
             AtomicReference<Double> distance = new AtomicReference<>(0.0);
@@ -61,12 +61,12 @@ public class NavigationHelper {
         });
     }
 
-    public void findOptimalRoute(Geolocation startingPoint, Geolocation destination, List<Waypoint> waypoints) {
+    public void findOptimalRoute(GeolocationDTO startingPoint, GeolocationDTO destination, List<Waypoint> waypoints) {
         findAllRoutes(waypoints.size(), waypoints);
         findOptimalRoute(this.routes, startingPoint, destination);
     }
 
-    public Point2D.Double locationToPoint(Geolocation location) {
+    public Point2D.Double locationToPoint(GeolocationDTO location) {
         return new Point2D.Double(location.getPointX(), location.getPointY());
     }
 }
