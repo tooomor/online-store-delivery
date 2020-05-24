@@ -6,5 +6,5 @@ class Location {
     private Integer id;
     private String locationName;
     @OneToOne
-    private Address address;
+    private AddressDTO address;
 }
