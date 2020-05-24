@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Waypoint {
     String id;
-    Address address;
-    Geolocation location;
+    GeolocationDTO location;
 }

@@ -15,4 +15,5 @@ public class AddressDTO {
     String apartmentNumber;
     String postalCode;
     String city;
+    GeolocationDTO location;
 }
