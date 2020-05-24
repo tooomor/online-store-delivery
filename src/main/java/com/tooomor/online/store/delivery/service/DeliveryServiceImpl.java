@@ -27,7 +27,16 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public List<OrderItemDTO> calculateWay(OrderDTO orderDTO) {
+    public OrderDTO calculateWay(OrderDTO orderDTO) {
+        var orderItems = calculateOptimalWay(orderDTO);
+        return OrderDTO
+                .builder()
+                .orderItems(orderItems)
+                .routeLength(calculateRouteLength(orderItems))
+                .build();
+    }
+
+    public List<OrderItemDTO> calculateOptimalWay(OrderDTO orderDTO) {
         log.info(main_wh_location.toString());
         List<Waypoint> waypoints = orderDTO.getOrderItems()
                 .stream()
@@ -47,9 +56,18 @@ public class DeliveryServiceImpl implements DeliveryService {
                     .filter(sub -> sub.getWarehouse().getCode().equals(wp.getId()))
                     .forEach(sub -> sub.setWaypointNo(priority.get()));
             priority.getAndSet(priority.get() + 1);
-            });
+        });
         log.info(navigationHelper.toString());
         return orderDTO.getOrderItems();
+    }
+
+    public Integer calculateRouteLength(List<OrderItemDTO> orderItemDTOList) {
+        return orderItemDTOList
+                .stream()
+                .map(item->item.getWarehouse().getCode())
+                .distinct()
+                .collect(Collectors.toList())
+                .size();
     }
 
 }

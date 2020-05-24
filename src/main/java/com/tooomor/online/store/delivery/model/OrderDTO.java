@@ -15,4 +15,5 @@ public class OrderDTO {
     String orderNumber;
     ClientDTO client;
     List<OrderItemDTO> orderItems;
+    Integer routeLength;
 }
