@@ -2,7 +2,9 @@ package com.tooomor.online.store.delivery.service;
 
 import com.tooomor.online.store.delivery.model.*;
 import com.tooomor.online.store.delivery.utils.NavigationHelper;
+import com.tooomor.online.store.delivery.warehouse.WarehouseClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,12 @@ import java.util.stream.Collectors;
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
 
-    private Geolocation main_wh_location = new Geolocation();
+    @Autowired
+    WarehouseClient warehouseClient;
 
-    public void setMain_wh_location(Geolocation main_wh_location) {
+    private GeolocationDTO main_wh_location = new GeolocationDTO();
+
+    public void setMain_wh_location(GeolocationDTO main_wh_location) {
         this.main_wh_location = main_wh_location;
     }
 
@@ -28,8 +33,8 @@ public class DeliveryServiceImpl implements DeliveryService {
                 .stream()
                 .map(oi -> {
                     WarehouseDTO wh = oi.getWarehouse();
-                    //TODO
-                    return Waypoint.builder().id(wh.getCode()).location(wh.getAddress().getLocation()).build();
+                    var whGeoLocation = warehouseClient.getGeolocationByWarehouseId(wh.getCode());
+                    return Waypoint.builder().id(wh.getCode()).location(whGeoLocation).build();
                 })
                 .collect(Collectors.toList());
         NavigationHelper navigationHelper = new NavigationHelper();
