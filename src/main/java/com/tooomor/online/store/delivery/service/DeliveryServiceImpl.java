@@ -45,7 +45,11 @@ public class DeliveryServiceImpl implements DeliveryService {
                 .map(oi -> {
                     WarehouseDTO wh = oi.getWarehouse();
                     var whGeoLocation = warehouseClient.getGeolocationByWarehouseId(wh.getCode());
-                    return Waypoint.builder().id(wh.getCode()).location(whGeoLocation).build();
+                    return Waypoint
+                            .builder()
+                            .id(wh.getCode())
+                            .location(whGeoLocation)
+                            .build();
                 })
                 .collect(Collectors.toList());
         NavigationHelper navigationHelper = new NavigationHelper();
