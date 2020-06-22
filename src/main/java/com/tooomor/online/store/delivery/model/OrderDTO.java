@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OrderDTO {
-    String orderNumber;
-    ClientDTO client;
+    String orderId;
+    GeolocationDTO geolocation;
     List<OrderItemDTO> orderItems;
     Integer routeLength;
 }

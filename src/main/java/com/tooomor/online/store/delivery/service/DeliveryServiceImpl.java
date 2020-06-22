@@ -31,6 +31,8 @@ public class DeliveryServiceImpl implements DeliveryService {
         var orderItems = calculateOptimalWay(orderDTO);
         return OrderDTO
                 .builder()
+                .orderId(orderDTO.getOrderId())
+                .geolocation(orderDTO.getGeolocation())
                 .orderItems(orderItems)
                 .routeLength(calculateRouteLength(orderItems))
                 .build();
@@ -48,7 +50,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                 .collect(Collectors.toList());
         NavigationHelper navigationHelper = new NavigationHelper();
         //TODO
-        navigationHelper.findOptimalRoute(main_wh_location, orderDTO.getClient().getAddress().getLocation(), waypoints);
+        navigationHelper.findOptimalRoute(main_wh_location, orderDTO.getGeolocation(), waypoints);
         AtomicReference<Integer> priority = new AtomicReference<>(1);
         navigationHelper.getOptimalRoute().stream().forEach(wp -> {
             orderDTO.getOrderItems()

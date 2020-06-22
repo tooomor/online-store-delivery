@@ -33,7 +33,6 @@
 
         <!-- Names the annotated entity class -->
         <mapping class="com.tooomor.online.store.delivery.model.AddressDTO"/>
-        <mapping class="com.tooomor.online.store.delivery.model.Location"/>
         <mapping class="com.tooomor.online.store.delivery.model.GeolocationDTO"/>
     </session-factory>
 
